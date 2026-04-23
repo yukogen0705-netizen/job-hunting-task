@@ -57,7 +57,9 @@ index.html をブラウザで開くことで動作します。
 
 また、UIの見やすさや操作性も向上させ、より実用的なアプリにしたいです。
 
-コード
+## 全体コード
+
+```html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -76,6 +78,7 @@ input, button {
   border: 1px solid #ccc;
   padding: 10px;
   margin-top: 5px;
+  border-radius: 8px;
 }
 </style>
 </head>
@@ -90,7 +93,11 @@ input, button {
 <div id="taskList"></div>
 
 <script>
-let tasks = [];
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+function saveTasks() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
 
 function addTask() {
   const taskInput = document.getElementById("taskInput").value;
@@ -102,7 +109,17 @@ function addTask() {
   }
 
   tasks.push({ taskInput, deadline });
+  saveTasks();
   renderTasks();
+}
+
+function formatRemainingTime(diffMs) {
+  const totalMinutes = Math.floor(diffMs / (1000 * 60));
+  const days = Math.floor(totalMinutes / (60 * 24));
+  const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
+  const minutes = totalMinutes % 60;
+
+  return `${days}日 ${hours}時間 ${minutes}分`;
 }
 
 function renderTasks() {
@@ -112,20 +129,39 @@ function renderTasks() {
   tasks.forEach((task, index) => {
     const now = new Date();
     const end = new Date(task.deadline);
-    const diff = Math.floor((end - now) / (1000 * 60 * 60));
+    const diff = end - now;
 
     const div = document.createElement("div");
     div.className = "task";
+
+    let remainingText = "";
+    if (diff > 0) {
+      remainingText = `残り：約 ${formatRemainingTime(diff)}`;
+    } else {
+      remainingText = "期限切れ";
+    }
+
     div.innerHTML = `
       <strong>${task.taskInput}</strong><br>
       締切：${task.deadline}<br>
-      残り：約 ${diff} 時間<br>
+      ${remainingText}<br>
       <button onclick="deleteTask(${index})">削除</button>
     `;
     list.appendChild(div);
   });
 }
 
+function deleteTask(index) {
+  tasks.splice(index, 1);
+  saveTasks();
+  renderTasks();
+}
+
+renderTasks();
+</script>
+
+</body>
+</html>
 function deleteTask(index) {
   tasks.splice(index, 1);
   renderTasks();
