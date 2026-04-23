@@ -56,3 +56,81 @@ index.html をブラウザで開くことで動作します。
 次回は localStorage などを活用してデータを保存できるように改善したいと考えています。
 
 また、UIの見やすさや操作性も向上させ、より実用的なアプリにしたいです。
+
+コード
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>就活スケジュール管理</title>
+<style>
+body {
+  font-family: Arial;
+  max-width: 600px;
+  margin: auto;
+}
+input, button {
+  margin: 5px;
+}
+.task {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 5px;
+}
+</style>
+</head>
+<body>
+
+<h2>就活スケジュール管理</h2>
+
+<input type="text" id="taskInput" placeholder="内容（例：面接・適性検査）">
+<input type="datetime-local" id="deadline">
+<button onclick="addTask()">追加</button>
+
+<div id="taskList"></div>
+
+<script>
+let tasks = [];
+
+function addTask() {
+  const taskInput = document.getElementById("taskInput").value;
+  const deadline = document.getElementById("deadline").value;
+
+  if (!taskInput || !deadline) {
+    alert("入力してください");
+    return;
+  }
+
+  tasks.push({ taskInput, deadline });
+  renderTasks();
+}
+
+function renderTasks() {
+  const list = document.getElementById("taskList");
+  list.innerHTML = "";
+
+  tasks.forEach((task, index) => {
+    const now = new Date();
+    const end = new Date(task.deadline);
+    const diff = Math.floor((end - now) / (1000 * 60 * 60));
+
+    const div = document.createElement("div");
+    div.className = "task";
+    div.innerHTML = `
+      <strong>${task.taskInput}</strong><br>
+      締切：${task.deadline}<br>
+      残り：約 ${diff} 時間<br>
+      <button onclick="deleteTask(${index})">削除</button>
+    `;
+    list.appendChild(div);
+  });
+}
+
+function deleteTask(index) {
+  tasks.splice(index, 1);
+  renderTasks();
+}
+</script>
+
+</body>
+</html>
