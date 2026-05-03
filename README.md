@@ -18,7 +18,7 @@
 index.html をブラウザで開くことで動作します。
 
 ## 動作イメージ
-![アプリ画面](<img width="1920" height="1080" alt="screenshot" src="https://github.com/user-attachments/assets/18a38605-cff5-467b-873f-3f06214fb23c" />
+![アプリ画面](https://github.com/yukogen0705-netizen/job-hunting-task/blob/main/screenshot.png
 )
 
 
