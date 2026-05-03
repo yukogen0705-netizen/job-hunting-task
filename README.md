@@ -18,7 +18,8 @@
 index.html をブラウザで開くことで動作します。
 
 ## 動作イメージ
-![アプリ画面](screenshot.png)
+![アプリ画面](<img width="1920" height="1080" alt="スクリーンショット (7)" src="https://github.com/user-attachments/assets/75cf206a-4a92-4324-bfd7-610083c8755a" />
+)
 
 ## 工夫した点
 締切までの残り時間を自動で計算して表示するようにしました。
